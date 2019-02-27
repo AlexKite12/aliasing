@@ -68,12 +68,14 @@ def covertAnimationToPixel(animation):
     return get_animation(frames_list, duration)
 
 def get_frames(animation):
-    frames_list = [frame.copy() for frame in ImageSequence.Iterator(animation)]
+    frames_list = [frame.convert('RGBA').copy() for frame in ImageSequence.Iterator(animation)]
     for frame in frames_list:
         yield frame
 
-def get_animation(frames_list, duration=0.1):
-    writeGif('animation.gif', frames_list, duration=duration)
+def get_animation(frames_list, duration=150):
+    im = frames_list[0]
+    im.save('out.gif', save_all=True, append_images=frames_list[1:], duration=duration, loop=0)
+    return im
 
 def main():
     parser = argparse.ArgumentParser(description='Convert image to pixel')
